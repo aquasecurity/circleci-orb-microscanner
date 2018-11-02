@@ -1,0 +1,25 @@
+# CircleCI build config to test the 
+# Aquasec microscanner
+
+version: 2.1
+
+orbs:
+  microscanner: ttrahan/microscanner@dev:alpha
+
+
+jobs:
+  docker-build:
+    executor: microscanner/default
+    steps:
+      - checkout
+      - run: docker build -t circleci/node:latest .
+
+workflows:
+  scan-image:
+    jobs:
+      - docker-build
+      - microscanner/scan-image:
+          requires: 
+            - docker-build
+          context: ttrahan
+          image: circleci/node:latest

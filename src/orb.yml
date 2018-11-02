@@ -1,0 +1,102 @@
+version: 2.1
+
+description: |
+  TODO
+examples:
+  simple_build_and_scan:
+    description: Scan a newly built docker image with Aquasec's microscanner
+    usage:
+      version: 2.1
+
+      orbs:
+        microscanner: aquasec/microscanner@1.0.0
+
+      jobs:
+        docker-build:
+          executor: microscanner/default
+          steps:
+            - checkout
+            - run: docker build -t myrepo/myimage:tag .
+
+      workflows:
+        scan-image:
+          jobs:
+            - docker-build
+            - microscanner/scan-image:
+                requires: 
+                  - docker-build
+                context: myContext
+                image: myrepo/myimage:mytag
+
+executors:
+  default:
+    description: A debian-based machine executor.  Note that there is an 
+                 overhead for provisioning a machine executor as a result of
+                 spinning up a private Docker server. Use of the machine key
+                 may require additional fees.
+    machine: 
+      image: circleci/classic:201808-01
+
+commands:
+  install:
+    description: Install the Aqua microscanner binary
+    parameters:
+      token:
+        description: The Aqua microscanner token
+        type: string
+        default: $AQUA_TOKEN
+    steps:
+      - run: |
+          git clone git@github.com:lukebond/microscanner-wrapper.git
+  scan:
+    description: Scan container image
+    parameters:
+      token:
+        description: The Aqua microscanner token
+        type: string
+        default: $AQUA_TOKEN
+      image:
+        description: The image to scan
+        type: string
+      artifact-type:
+        description: The type of artifact to output
+        type: string
+        default: html
+    steps:
+      - run:
+          name: create artifact
+          # background: true
+          command: |
+            mkdir output
+            cd microscanner-wrapper
+            if [[ <<parameters.artifact-type>> == json ]]; then
+              MICROSCANNER_TOKEN=<<parameters.token>> ./grabjson.sh <<parameters.image>> > ../output/output.json
+            else
+              MICROSCANNER_TOKEN=<<parameters.token>> ./grabhtml.sh <<parameters.image>> > ../output/output.html
+            fi
+      - store_artifacts:
+          path: output
+
+jobs:
+  scan-image:
+    executor: default
+    parameters:
+      token:
+        description: The Aqua microscanner token
+        type: string
+        default: $AQUA_TOKEN
+      image:
+        description: The image to scan
+        type: string
+      artifact-type:
+        description: The type of artifact to output
+        type: string
+        default: html
+      dockerfile-path:
+        description: The path to your Dockerfile
+        type: string
+        default: .
+    steps:
+      - install 
+      - scan:
+          image: <<parameters.image>>
