@@ -4,7 +4,7 @@ description: |
   TODO
 examples:
   simple_build_and_scan:
-    description: Scan a newly built docker image with Aquasec's microscanner
+    description: Scan a newly built docker image with the Aqua Security microscanner.
     usage:
       version: 2.1
 
