@@ -5,13 +5,27 @@
 FROM circleci/node:chakracore-8.11.1
 
 # Update apt sources and install a java jre for some scanning data examples
-RUN sudo apt-get update; sudo apt-get install -y openjdk-8-jre 
-  
+RUN if grep -q Debian /etc/os-release && grep -q jessie /etc/os-release; then \
+    echo "deb http://http.us.debian.org/debian/ jessie-backports main" | sudo tee -a /etc/apt/sources.list \
+    && echo "deb-src http://http.us.debian.org/debian/ jessie-backports main" | sudo tee -a /etc/apt/sources.list \
+    && sudo apt-get update; sudo apt-get install -y -t jessie-backports openjdk-8-jre 
+  ; elif grep -q Ubuntu /etc/os-release && grep -q Trusty /etc/os-release; then \
+    echo "deb http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list \
+    && echo "deb-src http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list \
+    && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key DA1A4A13543B466853BAF164EB9B1D8886F44E2A \
+    && sudo apt-get update; sudo apt-get install -y openjdk-8-jre 
+  ; else \
+    sudo apt-get update; sudo apt-get install -y openjdk-8-jre 
+  ; fi
+
 # Install a known ulnerable package as an example
-RUN sudo apt-get update; sudo apt-get install -y -t 8:6.9.7.4+dfsg-11+deb9u6
+RUN sudo apt-get update; sudo apt-get install -y -t imagemagick=8:6.9.7.4+dfsg-11+deb9u6
 
 # ensure that the build agent doesn't override the entrypoint
 LABEL com.circleci.preserve-entrypoint=true
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["/bin/sh"]
+
+
+
