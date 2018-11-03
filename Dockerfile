@@ -8,14 +8,14 @@ FROM circleci/node:chakracore-8.11.1
 RUN if grep -q Debian /etc/os-release && grep -q jessie /etc/os-release; then \
     echo "deb http://http.us.debian.org/debian/ jessie-backports main" | sudo tee -a /etc/apt/sources.list \
     && echo "deb-src http://http.us.debian.org/debian/ jessie-backports main" | sudo tee -a /etc/apt/sources.list \
-    && sudo apt-get update; sudo apt-get install -y -t jessie-backports openjdk-8-jre 
+    && sudo apt-get update; sudo apt-get install -y -t jessie-backports openjdk-8-jre \
   ; elif grep -q Ubuntu /etc/os-release && grep -q Trusty /etc/os-release; then \
     echo "deb http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list \
     && echo "deb-src http://ppa.launchpad.net/openjdk-r/ppa/ubuntu trusty main" | sudo tee -a /etc/apt/sources.list \
     && sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key DA1A4A13543B466853BAF164EB9B1D8886F44E2A \
-    && sudo apt-get update; sudo apt-get install -y openjdk-8-jre 
+    && sudo apt-get update; sudo apt-get install -y openjdk-8-jre \
   ; else \
-    sudo apt-get update; sudo apt-get install -y openjdk-8-jre 
+    sudo apt-get update; sudo apt-get install -y openjdk-8-jre \
   ; fi
 
 # Install a known ulnerable package as an example
