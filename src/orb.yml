@@ -9,7 +9,7 @@ examples:
       version: 2.1
 
       orbs:
-        microscanner: aquasec/microscanner@1.0.0
+        microscanner: aquasecurity/microscanner@dev:0.0.1
 
       jobs:
         docker-build:
