@@ -1,5 +1,5 @@
-# CircleCI build config to test the 
-# Aquasec microscanner
+# CircleCI build config example for testing implementing the 
+# Aqua Security MicroScanner
 
 version: 2.1
 
