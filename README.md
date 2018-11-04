@@ -26,13 +26,13 @@ Register for a MicroScanner token as described on the MicroScanner GitHub page. 
 Navigate to Org Settings > Context and create a context
 
 <p align="left">
-  <img alt="Create a context" src="https://cloud.githubusercontent.com/.png">
+  <img alt="Create a context" src="https://github.com/aquasecurity/circleci-orb-microscanner/blob/master/images/context1.png">
 </p>
 
 Within your new context create an environment variable named "AQUA_TOKEN"
 
 <p align="left">
-  <img alt="Add AQUA_TOKEN env var" src="https://cloud.githubusercontent.com.png">
+  <img alt="Add AQUA_TOKEN env var" src="https://github.com/aquasecurity/circleci-orb-microscanner/blob/master/images/contextEnvVar.png">
 </p>
 
 ### Add required configuration to your build configuration
