@@ -1,8 +1,9 @@
 
 # Aqua Security MicroScanner Orb for CircleCi
 
-    Development Status
-    This Orb is in development stage and therefore not available in a production Orb repository. You can use the following development repository link: `aquasecurity/microscanner@dev:0.0.1` for testing.
+    Warning: Code in Development
+    This Orb is in development stage and therefore not available in a production Orb repository.
+    You may use the following development repository link: `aquasecurity/microscanner@dev:0.0.1` for testing.
 
 ## What is the MicroScanner Orb?
 
