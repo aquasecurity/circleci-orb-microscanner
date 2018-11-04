@@ -19,23 +19,22 @@ The MicroScanner Orb is an easy way to get started creating free, automated vuln
 
 ## How to use the Aqua MicroScanner Orb in your config.yml
 
-Register for a MicroScanner token as described on the MicroScanner GitHub page. https://microscanner.aquasec.com/signup
+### 1. Register for a MicroScanner token as described [here.](#https://microscanner.aquasec.com/signup)
 
-### Create a context in the CircleCi portal and assign the required variables
-
-Navigate to Org Settings > Context and create a context
+### 2. Create a context in the CircleCi portal and assign the required variables
+    Navigate to Org Settings > Context and create a context
 
 <p align="left">
   <img alt="Create a context" src="https://github.com/aquasecurity/circleci-orb-microscanner/blob/master/images/context1.png">
 </p>
 
-Within your new context create an environment variable named "AQUA_TOKEN"
+### 3. Within your new context create an environment variable named "AQUA_TOKEN" and populate it with the token from step #1
 
 <p align="left">
-  <img alt="Add AQUA_TOKEN env var" src="https://github.com/aquasecurity/circleci-orb-microscanner/blob/master/images/contextEnvVar.png">
+  <img alt="Add the AQUA_TOKEN environment variable" src="https://github.com/aquasecurity/circleci-orb-microscanner/blob/master/images/contextEnvVar.png">
 </p>
 
-### Add required configuration to your build configuration
+### 4. Add the required configuration to your build configuration
 
 The following `.circleci/config.yml` is an example of a docker build configuration based on https://circleci.com/docs/2.0/building-docker-images/
 
@@ -86,7 +85,7 @@ jobs:
  ...
 ```
 
-The final step is to add a workflow that triggers the vulnerability scan.
+The final step is to edit your workflow to trigger a vulnerability scan.
 
 ```shell
  ...
@@ -95,31 +94,17 @@ workflows:
     jobs:
       - docker-build
       - microscanner/scan-image:
-          requires: 
+          requires:
             - docker-build
           context: microscanner
           image: circleci/node:latest
 ```
 
+## Viewing Scan Results
+By default the MicroScanner will pass a `0` for a passing scan (that is, a scan that has no high ranking vuvulnerabilities) and a `4` for a failing scan. This `4` of course stops the CircleCi process.
 
+A report is created upon a failed scan. This is linked to within the CircleCi as an artifact. Navigate to the artifact tab in the CircleCi dashboard for viewing this report.
 
-
-##### nexus-orb/install
-This will install groovy and the Nexus client into your build system. You only need to run
-this once per build even if you publish multiple artifacts.
-
-##### nexus-orb/archive
-This will upload your artifacts to Nexus Repository Manager.
-* **filename**: path to the file to publish. This is typically the same value as the `path` used in
-the `store_artifacts` step in the code example above.
-* **attributes**: List of component and asset attributes. Component attributes are prefixed with `-C` and asset attributes
- with `-A`. This is passed directly to Nexus Repository Manger so many additional 
- attributes to the ones used in the example above can be used as well.
-
-#### CircleCi Context support
-`username`, `password`, and possibly `serverurl` should not be hardcoded in your build files.
-If you create a CircleCi context with the environment variables below you can remove them from
-your `.circleci/config.yml` file.
-* **username:** `NEXUS_RM_USERNAME`
-* **password:** `NEXUS_RM_PASSWORD`
-* **serverurl:** `NEXUS_RM_SERVERURL`
+<p align="left">
+  <img alt="View Scan Results" src="https://github.com/aquasecurity/circleci-orb-microscanner/blob/master/images/scanReport.png">
+</p>
