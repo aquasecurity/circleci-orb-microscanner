@@ -1,7 +1,7 @@
 version: 2.1
 
 description: |
-  TODO
+  This orb creates a wrapper for the Aqua Security MicroScanner. This tool is freely available on GitHub.
 examples:
   simple_build_and_scan:
     description: Scan a newly built docker image with the Aqua Security microscanner.
