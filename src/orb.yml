@@ -65,7 +65,6 @@ commands:
     steps:
       - run:
           name: create artifact
-          # background: true
           command: |
             mkdir output
             cd microscanner-wrapper
