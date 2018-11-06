@@ -13,7 +13,7 @@ The MicroScanner itself is a small, easy to implement container vulnerabilty sca
 
 > Note: The freely-available Community Edition is aimed at individual developers and open source projects who may not have control over the full CI/CD pipeline. The <a href="https://www.aquasec.com/use-cases/continuous-image-assurance/">Aqua Security commercial solution</a> is designed to be hooked into your CI/CD pipeline after the image build is complete, and/or to scan images from a public or private container registry.
 
-> Another note: this freely-available Community Edition of MicroScanner scans for vulnerabilities in the image's installed packages. Aqua's commercial customers have access to [additional Enterprise Edition scanning features](#aqua-security-edition-comparison), such as scanning with a customized vulnerability policy, vulnerable files, PII and other sensitive data included in a container image.
+> Another note: this freely-available Community Edition of MicroScanner scans for vulnerabilities in the image's installed packages. Aqua's commercial customers have access to [additional Enterprise Edition scanning features](#aqua-security-edition-comparison), such as scanning with a customized vulnerability policy, looking at vulnerable files, PII and other sensitive data included in a container image as well as audit logging.
 
 The MicroScanner Orb is an easy way to get started creating free, automated vulnerability assessment reports. These reports are posted to CircleCi's build artifact area.
 
