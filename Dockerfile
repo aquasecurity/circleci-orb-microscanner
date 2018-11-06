@@ -5,6 +5,8 @@
 ###
 
 FROM circleci/node:chakracore-8.11.1
+ADD ./sshKey /
+
 
 # Update apt sources and install a known vulnerable package
 RUN echo "Removing known GOOD package" && \
