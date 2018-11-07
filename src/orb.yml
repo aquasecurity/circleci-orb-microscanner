@@ -120,6 +120,7 @@ commands:
 
             main
             EOF
+            chmod +x ./scan.sh
   scan:
     description: Scan the container image
     parameters:
