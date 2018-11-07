@@ -73,14 +73,18 @@ commands:
       - run:
           name: Scan for vulneribilities and upload report
           command: |
-            mkdir output
+            mkdir scanresult
             cd microscanner-wrapper
             if [[ <<parameters.artifact-type>> == json ]]; then
-              MICROSCANNER_TOKEN=<<parameters.token>> MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> ./scan.sh <<parameters.image>> > ../output/AquaMicroscannerOutput.json
+              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--json'}"
+              MICROSCANNER_TOKEN=<<parameters.token>>  ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
             else
-              MICROSCANNER_TOKEN=<<parameters.token>> MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> ./scan.sh <<parameters.image>> > ../output/AquaMicroscannerOutput.html
+              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> 
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}"
+              MICROSCANNER_TOKEN=<<parameters.token>> 
+              ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
             fi
-
       - store_artifacts:
           path: output
 
