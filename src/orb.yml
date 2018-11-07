@@ -53,6 +53,7 @@ commands:
             cd scantemp
             
             cat \<< 'EOF' > ./scan.sh
+            
             #!/bin/bash
             set -euo pipefail
             MICROSCANNER_TOKEN="${MICROSCANNER_TOKEN:-}"
