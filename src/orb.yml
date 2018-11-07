@@ -9,8 +9,7 @@ examples:
       version: 2.1
 
       orbs:
-        microscanner: aquasecurity/microscanner@dev:0.0.5
-
+        microscanner: aquasecurity/microscanner@dev:0.1.1
       jobs:
         docker-build:
           executor: microscanner/default
@@ -39,20 +38,88 @@ executors:
 
 commands:
   install:
-    description: Obtain the Aqua MicroScanner binary
+    description: Create the runtime scanning
     parameters:
       token:
         description: The Aqua MicroScanner token
         type: string
-        default: $AQUA_TOKEN
+        default: $AQUA_TOKEN  
     steps:
       - run:
-          name: Download scanning wrapper
-          command: |
-            git clone git@github.com:lukebond/microscanner-wrapper.git
+        command: |
+            mkdir scanresult
+            mkdir scantemp
+            cd scantemp
+            cat >  ./scan.sh /</<EOL
+            #!/bin/bash
+            set -euo pipefail
+            MICROSCANNER_TOKEN="${MICROSCANNER_TOKEN:-}"
+            MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-}"
+            DOCKER_IMAGE="${1:-}"
+            TEMP_IMAGE_TAG=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' </dev/urandom | fold -w 32 | head -n 1 | tr '[:upper:]' '[:lower:]' || true)
+            MICROSCANNER_SOURCE="https://get.aquasec.com/microscanner"
 
+            main() {
+            local MICROSCANNER_SOURCE
+            [[ -z ${MICROSCANNER_TOKEN} ]] && {
+              print_usage
+              exit 1
+            }
+            [[ -z ${DOCKER_IMAGE} ]] && {
+              print_usage
+              exit 1
+            }
+
+            trap cleanup EXIT
+
+            TEMP_DIR=$(mktemp -d)
+            cd "${TEMP_DIR}"
+
+            {
+              echo "FROM ${DOCKER_IMAGE}"
+
+              cat /</<'EOL'
+            RUN if [ ! -d /etc/ssl/certs/ ] || { [ ! -f /etc/ssl/certs/ca-certificates.crt ] && [ ! -f /etc/ssl/certs/ca-bundle.crt ]; }; then \
+            PACKAGE_MANAGER=$(basename \
+              $({ command -v apk apt yum false 2>/dev/null || which apk apt yum false; } \
+              | head -n1)); \
+            if [ "${PACKAGE_MANAGER}" = "apk" ]; then \
+              apk --update add ca-certificates; \
+            elif [ "${PACKAGE_MANAGER}" = "apt" ]; then \
+              apt update \
+                && apt install --no-install-recommends -y ca-certificates \
+                && update-ca-certificates; \
+            elif [ "${PACKAGE_MANAGER}" = "yum" ]; then \
+              yum install -y ca-certificates; \
+            else \
+              echo 'ca-certificates not found and package manager not apk, apt, or yum. Aborting' >&2; \
+              exit 1; \
+            fi; \
+            fi;
+            EOL
+
+              cat /</<EOL
+            ADD ${MICROSCANNER_SOURCE} /tmp/microscanner
+            USER root
+            RUN [ -x /tmp/microscanner ] || chmod +x /tmp/microscanner \
+            && sync \
+            && /tmp/microscanner --version \
+            && /tmp/microscanner ${MICROSCANNER_OPTIONS} ${MICROSCANNER_TOKEN}
+            EOL
+
+            } | docker build --force-rm -t ${TEMP_IMAGE_TAG} -f - .
+            }
+            cleanup() {
+            if docker inspect --type=image "${TEMP_IMAGE_TAG}" &>/dev/null; then
+              docker image rm --force "${TEMP_IMAGE_TAG}" || true
+            fi
+            rm -rf "${TEMP_DIR}" || true
+            }
+
+            main
+            EOL
   scan:
-    description: Scan container image
+    description: Scan the container image
     parameters:
       token:
         description: The Aqua MicroScanner token
@@ -66,24 +133,22 @@ commands:
         description: The image to scan
         type: string
       artifact-type:
-        description: The type of artifact to output, options are json and html
+        description: The type of artifact to output; options are json and html
         type: string
         default: html
     steps:
       - run:
           name: Scan for vulneribilities and upload report
-          command: |
-            mkdir scanresult
-            cd microscanner-wrapper
+          command:
+            pwd
+            ls
             if [[ <<parameters.artifact-type>> == json ]]; then
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--json'}"
               MICROSCANNER_TOKEN=<<parameters.token>>
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
             else
-              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> 
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}"
-              MICROSCANNER_TOKEN=<<parameters.token>> 
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}" \
+              MICROSCANNER_TOKEN=<<parameters.token>> MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> 
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
             fi
       - store_artifacts:
