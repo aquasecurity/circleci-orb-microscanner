@@ -12,7 +12,7 @@ jobs:
     executor: microscanner/default
     steps:
       - checkout
-      - run: docker build -t jerbi/peekr:latest .
+      - run: docker build -t mynewimage/test:1 .
 
 workflows:
   scan-image:
@@ -22,5 +22,5 @@ workflows:
           requires: 
             - docker-build
           context: microscanner
-          image: jerbi/peekr:latest
+          image: mynewimage/test:1
           microscanner_options: "--continue-on-failure"
