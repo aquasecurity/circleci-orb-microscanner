@@ -12,7 +12,7 @@ jobs:
     executor: microscanner/default
     steps:
       - checkout
-      - run: docker build -t aquasec/peekr:latest .
+      - run: docker build -t jerbi/peekr:latest .
 
 workflows:
   scan-image:
