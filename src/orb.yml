@@ -39,10 +39,10 @@ executors:
 
 commands:
   install:
-    description: Install the Aqua microscanner binary
+    description: Obtain the Aqua MicroScanner binary
     parameters:
       token:
-        description: The Aqua microscanner token
+        description: The Aqua MicroScanner token
         type: string
         default: $AQUA_TOKEN
     steps:
@@ -52,14 +52,18 @@ commands:
     description: Scan container image
     parameters:
       token:
-        description: The Aqua microscanner token
+        description: The Aqua MicroScanner token
         type: string
         default: $AQUA_TOKEN
+      microscanner_options:
+        description: This var allows for option flags to be passed to the MicroScanner.
+        type: string
+        default: $MICROSCANNER_OPTIONS
       image:
         description: The image to scan
         type: string
       artifact-type:
-        description: The type of artifact to output
+        description: The type of artifact to output, options are json and html
         type: string
         default: html
     steps:
