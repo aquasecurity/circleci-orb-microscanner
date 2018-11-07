@@ -12,7 +12,6 @@ jobs:
     executor: microscanner/default
     steps:
       - checkout
-      - microscanner_options: ""
       - run: docker build -t circleci/node:latest .
 
 workflows:
