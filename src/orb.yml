@@ -64,10 +64,6 @@ commands:
 
             main() {
               local MICROSCANNER_SOURCE
-              [[ -z ${MICROSCANNER_TOKEN} ]] && {
-                print_usage
-                exit 1
-              }
               [[ -z ${DOCKER_IMAGE} ]] && {
                 print_usage
                 exit 1
