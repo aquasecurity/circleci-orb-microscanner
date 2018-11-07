@@ -73,9 +73,9 @@ commands:
             mkdir output
             cd microscanner-wrapper
             if [[ <<parameters.artifact-type>> == json ]]; then
-              MICROSCANNER_TOKEN=<<parameters.token>> ./grabjson.sh <<parameters.image>> > ../output/AquaMicroscannerOutput.json
+              MICROSCANNER_TOKEN=<<parameters.token>> MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> ./grabjson.sh <<parameters.image>> > ../output/AquaMicroscannerOutput.json
             else
-              MICROSCANNER_TOKEN=<<parameters.token>> ./grabhtml.sh <<parameters.image>> > ../output/AquaMicroscannerOutput.html
+              MICROSCANNER_TOKEN=<<parameters.token>> MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> ./grabhtml.sh <<parameters.image>> > ../output/AquaMicroscannerOutput.html
             fi
       - store_artifacts:
           path: output
