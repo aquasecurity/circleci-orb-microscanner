@@ -22,5 +22,5 @@ workflows:
           requires: 
             - docker-build
           context: microscanner
-          image: aquasec/peekr:latest
+          image: jerbi/peekr:latest
           microscanner_options: "--continue-on-failure"
