@@ -149,15 +149,25 @@ commands:
     steps:
       - run:
           name: Scan for vulneribilities and upload report
-          command: |
+          command:
             cd scantemp
             cp scan.sh ../scanresult/.
-            if [[ <<parameters.artifact-type>> == json ]]; then
-              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> MICROSCANNER_TOKEN=<<parameters.token>>
-              ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
-            else
-              MICROSCANNER_TOKEN=<<parameters.token>> ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
+            if [[ <<parameters.artifact-type>> == html ]]; then
+              MICROSCANNER_TOKEN=<<parameters.token>> 
+              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}"
               echo $MICROSCANNER_TOKEN
+              echo $MICROSCANNER_OPTIONS
+              ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
+              
+            else
+              MICROSCANNER_TOKEN=<<parameters.token>> 
+              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--json'}"
+              echo $MICROSCANNER_TOKEN
+              echo $MICROSCANNER_OPTIONS
+              ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
+
             fi
       - store_artifacts:
           path: scanresult
