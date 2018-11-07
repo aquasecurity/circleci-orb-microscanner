@@ -155,8 +155,12 @@ commands:
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> MICROSCANNER_TOKEN=<<parameters.token>>
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
             else
+              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
+              echo $MICROSCANNER_OPTIONS
               MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}"
-              MICROSCANNER_TOKEN=<<parameters.token>> MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> 
+              echo $MICROSCANNER_OPTIONS
+              MICROSCANNER_TOKEN=<<parameters.token>> 
+              echo $MICROSCANNER_TOKEN
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
             fi
       - store_artifacts:
