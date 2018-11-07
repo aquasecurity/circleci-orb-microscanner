@@ -144,6 +144,7 @@ commands:
           name: Scan for vulneribilities and upload report
           command: |
             cd scantemp
+            cp scan.sh ../scanresult/.
             if [[ <<parameters.artifact-type>> == json ]]; then
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> MICROSCANNER_TOKEN=<<parameters.token>>
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
