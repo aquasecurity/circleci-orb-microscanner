@@ -4,8 +4,7 @@
 ### This image is meant to be used only as a demonstration of the Aqua Security MicroScanner Orb.
 ###
 
-FROM jerbi/peekr
-
+FROM oraclelinux:7-slim
 
 # ensure that the build agent doesn't override the entrypoint
 LABEL com.circleci.preserve-entrypoint=true

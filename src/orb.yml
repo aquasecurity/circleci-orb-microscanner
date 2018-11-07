@@ -158,7 +158,6 @@ commands:
             else
               MICROSCANNER_TOKEN=<<parameters.token>> ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
               echo $MICROSCANNER_TOKEN
-              
             fi
       - store_artifacts:
           path: scanresult
