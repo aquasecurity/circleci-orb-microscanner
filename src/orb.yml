@@ -46,7 +46,7 @@ commands:
         default: $AQUA_TOKEN  
     steps:
       - run:
-          name: Create Scripts
+          name: Import scanning script
           command: |
             mkdir scanresult
             mkdir scantemp
@@ -141,7 +141,7 @@ commands:
     steps:
       - run:
           name: Scan for vulneribilities and upload report
-          command:
+          command: |
             pwd
             ls
             if [[ <<parameters.artifact-type>> == json ]]; then
