@@ -56,7 +56,7 @@ commands:
 
             #!/bin/bash
             set -euo pipefail
-            MICROSCANNER_TOKEN="${MICROSCANNER_TOKEN:-}"
+            AQUA_TOKEN="${AQUA_TOKEN:-}"
             MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-}"
             DOCKER_IMAGE="${1:-}"
             TEMP_IMAGE_TAG=$(LC_CTYPE=C tr -dc 'a-zA-Z0-9' </dev/urandom | fold -w 32 | head -n 1 | tr '[:upper:]' '[:lower:]' || true)
@@ -103,14 +103,14 @@ commands:
               RUN [ -x /tmp/microscanner ] || chmod +x /tmp/microscanner \
                 && sync \
                 && /tmp/microscanner --version \
-                && /tmp/microscanner ${MICROSCANNER_OPTIONS} ${MICROSCANNER_TOKEN}
+                && /tmp/microscanner ${MICROSCANNER_OPTIONS} ${AQUA_TOKEN}
             EOL
 
               } | docker build --force-rm -t ${TEMP_IMAGE_TAG} -f - .
               }
             
              print_usage() {
-              echo "Usage: MICROSCANNER_TOKEN=xxxxxxxxxxxxxxxx ./scan.sh DOCKER_IMAGE"
+              echo "Usage: ./scan.sh DOCKER_IMAGE"
               }
             
               cleanup() {
@@ -149,17 +149,17 @@ commands:
             cd scantemp
             cp scan.sh ../scanresult/.
             if [[ <<parameters.artifact-type>> == html ]]; then
-              MICROSCANNER_TOKEN=<<parameters.token>> 
+              AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
               MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}"
-              echo $MICROSCANNER_TOKEN
+              echo $AQUA_TOKEN
               echo $MICROSCANNER_OPTIONS
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
             else
-              MICROSCANNER_TOKEN=<<parameters.token>> 
+              AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
               MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--json'}"
-              echo $MICROSCANNER_TOKEN
+              echo $AQUA_TOKEN
               echo $MICROSCANNER_OPTIONS
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
 
