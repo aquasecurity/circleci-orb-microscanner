@@ -13,6 +13,7 @@ jobs:
     steps:
       - checkout
       - run: docker build -t circleci/node:latest .
+      - microscanner/install:
       - microscanner/scan:
           image: circleci/node:latest
           microscanner_options: "--continue-on-failure"
