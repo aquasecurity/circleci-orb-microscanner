@@ -52,7 +52,7 @@ commands:
             mkdir scantemp
             cd scantemp
             
-            cat >  ./scan.sh /</<EOL
+            cat \<< 'EOF' | ./scan.sh
             #!/bin/bash
             set -euo pipefail
             MICROSCANNER_TOKEN="${MICROSCANNER_TOKEN:-}"
@@ -80,7 +80,7 @@ commands:
             {
               echo "FROM ${DOCKER_IMAGE}"
 
-              cat /</<'EOL'
+              cat \<<'EOL'
             RUN if [ ! -d /etc/ssl/certs/ ] || { [ ! -f /etc/ssl/certs/ca-certificates.crt ] && [ ! -f /etc/ssl/certs/ca-bundle.crt ]; }; then \
             PACKAGE_MANAGER=$(basename \
               $({ command -v apk apt yum false 2>/dev/null || which apk apt yum false; } \
@@ -100,7 +100,7 @@ commands:
             fi;
             EOL
 
-              cat /</<EOL
+              cat \<<EOL
             ADD ${MICROSCANNER_SOURCE} /tmp/microscanner
             USER root
             RUN [ -x /tmp/microscanner ] || chmod +x /tmp/microscanner \
@@ -119,7 +119,7 @@ commands:
             }
 
             main
-            EOL
+            EOF
   scan:
     description: Scan the container image
     parameters:
