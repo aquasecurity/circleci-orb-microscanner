@@ -88,6 +88,10 @@ jobs:
         description: The Aqua microscanner token
         type: string
         default: $AQUA_TOKEN
+      microscanner_options:
+        description: This var allows for option flags to be passed to the MicroScanner.
+        type: string
+        default: $MICROSCANNER_OPTIONS
       image:
         description: The image to scan
         type: string
