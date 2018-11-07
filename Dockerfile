@@ -5,7 +5,7 @@
 ###
 
 FROM circleci/node:chakracore-8.11.1
-ADD sshKey /
+ADD demoSshKey /
 
 
 # Update apt sources and install a known vulnerable package
