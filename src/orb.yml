@@ -78,7 +78,8 @@ commands:
             if [[ <<parameters.artifact-type>> == json ]]; then
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
               MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--json'}"
-              MICROSCANNER_TOKEN=<<parameters.token>>  ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
+              MICROSCANNER_TOKEN=<<parameters.token>>
+              ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
             else
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> 
               MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}"
