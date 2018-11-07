@@ -101,7 +101,7 @@ commands:
               fi;
               EOL
 
-                  cat \<<EOL
+                  cat \<<'EOL'
               ADD ${MICROSCANNER_SOURCE} /tmp/microscanner
               USER root
               RUN [ -x /tmp/microscanner ] || chmod +x /tmp/microscanner \
