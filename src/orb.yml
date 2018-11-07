@@ -142,14 +142,12 @@ commands:
       - run:
           name: Scan for vulneribilities and upload report
           command: |
-            pwd
-            ls
+            cd scantemp
             if [[ <<parameters.artifact-type>> == json ]]; then
-              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_TOKEN=<<parameters.token>>
+              MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> MICROSCANNER_TOKEN=<<parameters.token>>
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
             else
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}" \
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}"
               MICROSCANNER_TOKEN=<<parameters.token>> MICROSCANNER_OPTIONS=<<parameters.microscanner_options>> 
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
             fi
