@@ -87,7 +87,7 @@ commands:
               ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
             fi
       - store_artifacts:
-          path: output
+          path: scanresult
 
 jobs:
   scan-image:
