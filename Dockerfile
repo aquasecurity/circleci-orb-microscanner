@@ -5,17 +5,17 @@
 ###
 
 FROM circleci/node:chakracore-8.11.1
-ADD demoSshKey /
+
 
 
 # Update apt sources and install a known vulnerable package
-RUN echo "Removing known GOOD package" && \
-sudo apt purge -f mercurial-common && \
-sudo apt-get update && \
-echo "Installing known BAD package" && \
-sudo apt-get install -t oldstable mercurial-common=3.1.2-2+deb8u4 &&\
-sudo apt-get install -t oldstable mercurial=3.1.2-2+deb8u4 &&\
-echo "Known BAD package installed"
+# RUN echo "Removing known GOOD package" && \
+# sudo apt purge -f mercurial-common && \
+# sudo apt-get update && \
+# echo "Installing known BAD package" && \
+# sudo apt-get install -t oldstable mercurial-common=3.1.2-2+deb8u4 &&\
+# sudo apt-get install -t oldstable mercurial=3.1.2-2+deb8u4 &&\
+# echo "Known BAD package installed"
 
 # ensure that the build agent doesn't override the entrypoint
 LABEL com.circleci.preserve-entrypoint=true
