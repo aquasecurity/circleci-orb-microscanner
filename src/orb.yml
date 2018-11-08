@@ -136,30 +136,26 @@ commands:
         description: The image to scan
         type: string
       artifact-type:
-        description: The type of artifact to output; options are json and html
+        description: The type of artifact to output; html is default, json is optional.
         type: string
         default: html
     steps:
       - run:
-          name: Scan for vulneribilities and upload report
+          name: Scan for vulneribilities and upload report artifact
           command: |
             cd scantemp
             cp scan.sh ../scanresult/.
             if [[ <<parameters.artifact-type>> == html ]]; then
               AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--html'}"
-              echo $AQUA_TOKEN
-              echo $MICROSCANNER_OPTIONS
-              ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --html" ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
+              echo "These options were sent to MicroScanner- $MICROSCANNER_OPTIONS"
+              
             else
               AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS:-'--json'}"
-              echo $AQUA_TOKEN
-              echo $MICROSCANNER_OPTIONS
-              ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
-
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --json" ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
+              echo "These options were sent to MicroScanner- $MICROSCANNER_OPTIONS"
             fi
       - store_artifacts:
           path: scanresult
