@@ -52,7 +52,7 @@ commands:
             mkdir scantemp
             cd scantemp
             
-            cat \<< 'EOF' > ./scan.sh
+            cat \<< 'EOF' > ./MicroScanner.sh
             #!/bin/bash
             set -euo pipefail
             AQUA_TOKEN="${AQUA_TOKEN:-}"
@@ -148,15 +148,18 @@ commands:
             if [[ <<parameters.artifact-type>> == html ]]; then
               AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --html" ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.html
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --html" ./MicroScanner.sh <<parameters.image>> > AquaMicroscannerOutput.temp
+              sed -n '/<!DOCTYPE html>/,/<\/body>/p' AquaMicroscannerOutput.temp > ../scanresult/AquaMicroscannerOutput.html
               echo "These options were sent to MicroScanner- $MICROSCANNER_OPTIONS"
               
             else
               AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --json" ./scan.sh <<parameters.image>> > ../scanresult/AquaMicroscannerOutput.json
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --json" ./MicroScanner.sh <<parameters.image>> > AquaMicroscannerOutput.temp
+              sed -n '/<!DOCTYPE html>/,/<\/body>/p' AquaMicroscannerOutput.temp > ../scanresult/AquaMicroscannerOutput.json
               echo "These options were sent to MicroScanner- $MICROSCANNER_OPTIONS"
             fi
+            
       - store_artifacts:
           path: scanresult
 
