@@ -53,7 +53,6 @@ commands:
             cd scantemp
             
             cat \<< 'EOF' > ./scan.sh
-
             #!/bin/bash
             set -euo pipefail
             AQUA_TOKEN="${AQUA_TOKEN:-}"
@@ -63,7 +62,6 @@ commands:
             MICROSCANNER_SOURCE="https://get.aquasec.com/microscanner"
 
             main() {
-              local MICROSCANNER_SOURCE
               [[ -z ${DOCKER_IMAGE} ]] && {
                 print_usage
                 exit 1
@@ -77,33 +75,33 @@ commands:
               {
                 echo "FROM ${DOCKER_IMAGE}"
 
-            cat \<<'EOL'
-              RUN if [ ! -d /etc/ssl/certs/ ] || { [ ! -f /etc/ssl/certs/ca-certificates.crt ] && [ ! -f /etc/ssl/certs/ca-bundle.crt ]; }; then \
-                PACKAGE_MANAGER=$(basename \
-                  $({ command -v apk apt yum false 2>/dev/null || which apk apt yum false; } \
-                  | head -n1)); \
-                if [ "${PACKAGE_MANAGER}" = "apk" ]; then \
-                  apk --update add ca-certificates; \
-                elif [ "${PACKAGE_MANAGER}" = "apt" ]; then \
-                  apt update \
-                    && apt install --no-install-recommends -y ca-certificates \
-                    && update-ca-certificates; \
-                elif [ "${PACKAGE_MANAGER}" = "yum" ]; then \
-                  yum install -y ca-certificates; \
-                else \
-                  echo 'ca-certificates not found and package manager not apk, apt, or yum. Aborting' >&2; \
-                  exit 1; \
-                fi; \
-              fi;
+            cat \<<"EOL"
+            RUN if [ ! -d /etc/ssl/certs/ ] || { [ ! -f /etc/ssl/certs/ca-certificates.crt ] && [ ! -f /etc/ssl/certs/ca-bundle.crt ]; }; then \
+              PACKAGE_MANAGER=$(basename \
+                $({ command -v apk apt yum false 2>/dev/null || which apk apt yum false; } \
+                | head -n1)); \
+              if [ "${PACKAGE_MANAGER}" = "apk" ]; then \
+                apk --update add ca-certificates; \
+              elif [ "${PACKAGE_MANAGER}" = "apt" ]; then \
+                apt update \
+                  && apt install --no-install-recommends -y ca-certificates \
+                  && update-ca-certificates; \
+              elif [ "${PACKAGE_MANAGER}" = "yum" ]; then \
+                yum install -y ca-certificates; \
+              else \
+                echo 'ca-certificates not found and package manager not apk, apt, or yum. Aborting' >&2; \
+                exit 1; \
+              fi; \
+            fi;
             EOL
 
-            cat \<<'EOL'
-              ADD ${MICROSCANNER_SOURCE} /tmp/microscanner
-              USER root
-              RUN [ -x /tmp/microscanner ] || chmod +x /tmp/microscanner \
-                && sync \
-                && /tmp/microscanner --version \
-                && /tmp/microscanner ${MICROSCANNER_OPTIONS} ${AQUA_TOKEN}
+            cat \<<EOL
+            ADD ${MICROSCANNER_SOURCE} /tmp/microscanner
+            USER root
+            RUN [ -x /tmp/microscanner ] || chmod +x /tmp/microscanner \
+            && sync \
+            && /tmp/microscanner --version \
+            && /tmp/microscanner ${MICROSCANNER_OPTIONS} ${AQUA_TOKEN}
             EOL
 
               } | docker build --force-rm -t ${TEMP_IMAGE_TAG} -f - .
@@ -121,7 +119,6 @@ commands:
               }
 
             main
-            echo $MICROSCANNER_OPTIONS
             EOF
             chmod +x ./scan.sh
   scan:
