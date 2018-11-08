@@ -147,7 +147,7 @@ commands:
             if [[ <<parameters.artifact-type>> == html ]]; then
               AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --html" ./MicroScanner.sh <<parameters.image>> | sed -n '/<!DOCTYPE html>/,/<\/body>/p' > ../scanresult/AquaMicroscannerOutput.heml
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --html" ./MicroScanner.sh <<parameters.image>> | sed -n '/<!DOCTYPE html>/,/<\/body>/p' > ../scanresult/AquaMicroscannerOutput.html
               echo These options were sent to MicroScanner -> $MICROSCANNER_OPTIONS
               
             else
