@@ -147,15 +147,13 @@ commands:
             if [[ <<parameters.artifact-type>> == html ]]; then
               AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --html" ./MicroScanner.sh <<parameters.image>> > AquaMicroscannerOutput.temp
-              sed -n '/<!DOCTYPE html>/,/<\/body>/p' AquaMicroscannerOutput.temp > ../scanresult/AquaMicroscannerOutput.html
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --html" ./MicroScanner.sh <<parameters.image>> | sed -n '/<!DOCTYPE html>/,/<\/body>/p' > ../scanresult/AquaMicroscannerOutput.heml
               echo These options were sent to MicroScanner -> $MICROSCANNER_OPTIONS
               
             else
               AQUA_TOKEN=<<parameters.token>> 
               MICROSCANNER_OPTIONS=<<parameters.microscanner_options>>
-              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --json" ./MicroScanner.sh <<parameters.image>> > AquaMicroscannerOutput.temp
-              sed -n '/<!DOCTYPE html>/,/<\/body>/p' AquaMicroscannerOutput.temp > ../scanresult/AquaMicroscannerOutput.json
+              MICROSCANNER_OPTIONS="${MICROSCANNER_OPTIONS} --json" ./MicroScanner.sh <<parameters.image>> | sed -n '/<!DOCTYPE html>/,/<\/body>/p' > ../scanresult/AquaMicroscannerOutput.json
               echo These options were sent to MicroScanner -> $MICROSCANNER_OPTIONS
             fi
             
