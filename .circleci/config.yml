@@ -4,23 +4,22 @@
 version: 2.1
 
 orbs:
-  microscanner: aquasecurity/microscanner@dev:0.0.4
+  microscanner: aquasecurity/microscanner@dev:0.1.5
 
 
 jobs:
-  docker-build:
+  build-and-scan:
     executor: microscanner/default
     steps:
       - checkout
-      - run: docker build -t circleci/node:latest .
+      - run: docker build -t build/test:latest .
+      - microscanner/install
+      - microscanner/scan:
+          image: build/test:latest
+          microscanner_options: "--continue-on-failure"
 
 workflows:
   scan-image:
     jobs:
-      - docker-build
-      - microscanner/scan-image:
-          requires: 
-            - docker-build
+      - build-and-scan:
           context: microscanner
-          image: circleci/node:latest
-          microscanner_options: "--continue-on-failure"
