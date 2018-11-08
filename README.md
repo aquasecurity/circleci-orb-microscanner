@@ -1,10 +1,6 @@
 
 # Aqua Security MicroScanner Orb for CircleCi
 
-    Warning: Code in Development
-    This Orb is in development stage and therefore not available in a production Orb repository.
-    You may use the following development repository link: `aquasecurity/microscanner@dev:0.0.1` for testing.
-
 ## What is the MicroScanner Orb?
 
 Aqua Security's MicroScanner enables you check your container images for vulnerabilities. If your image has any known high-severity issue, MicroScanner can fail the image build, making it easy to include as a step in your CI/CD pipeline.
