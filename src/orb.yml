@@ -120,7 +120,7 @@ commands:
 
             main
             EOF
-            chmod +x /MicroScanner.sh
+            chmod +x ./MicroScanner.sh
   scan:
     description: Scan the container image
     parameters:
