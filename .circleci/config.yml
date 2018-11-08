@@ -16,7 +16,7 @@ jobs:
       - microscanner/install
       - microscanner/scan:
           image: build/test:latest
-          microscanner_options: ""
+          microscanner_options: "--continue-on-failure"
 
 workflows:
   scan-image:
